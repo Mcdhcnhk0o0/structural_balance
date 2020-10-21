@@ -1,8 +1,7 @@
 import time
 import random as rd
 import signed_utils as utils
-from module.frustration import Frustration
-from module.neighborhood import Neighborhood
+from module import *
 
 """
 分离了算法流程、邻域结构与目标函数，算法只需要关注自己本身的实现

@@ -2,8 +2,7 @@ import time
 import random as rd
 import signed_utils as utils
 import relocation_heuristic as relocation_heuristic
-from module.frustration import Frustration
-from module.neighborhood import Neighborhood
+from module import *
 
 
 class VariableNeighborhoodSearch:

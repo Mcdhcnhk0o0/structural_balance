@@ -1,7 +1,4 @@
-from module.neighborhood import Neighborhood
-from module.frustration import Frustration
-from module.initialization import Initialization
-from module.local_search import LocalSearch
+from module import *
 import signed_utils as utils
 import random as rd
 
