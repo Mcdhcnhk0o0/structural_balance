@@ -43,6 +43,8 @@ def load_data(path: str, network_type='signed') -> Dataset:
             # 数据集格式为“结点  结点  边的属性”
             for each in f:
                 n1, n2, attr = each.split()
+                if attr != '1' and attr != '-1':
+                    continue
                 n1, n2 = int(n1), int(n2)
                 data[n1][n2] = data[n2][n1] = int(attr)
         elif network_type == 'unsigned':

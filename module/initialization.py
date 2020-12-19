@@ -115,6 +115,9 @@ class Initialization:
 
         return solution, partition
 
+    def grasp_initialization(self):
+        pass
+
     def __generate_community_seeds(self, neighborhood):
         """
         社区种子的一种生成方法，参考文献：Detecting local community structures in complex networks

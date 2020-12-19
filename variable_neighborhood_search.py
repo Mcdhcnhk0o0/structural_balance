@@ -109,7 +109,7 @@ class VariableNeighborhoodSearch:
 
 if __name__ == '__main__':
     dir_path = r'C:\Users\WQQDuan\PycharmProjects\conda\social_network\src\Slashdot'
-    ds_name = r'\slashdot-undirected-size1000-part0.g'
+    ds_name = r'\slashdot-undirected-size10000-part0.g'
     ds = utils.load_data(dir_path + ds_name, 'signed')
 
     rh = relocation_heuristic.RelocationHeuristic(dataset=ds, k=8)

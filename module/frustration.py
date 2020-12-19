@@ -30,17 +30,20 @@ class Frustration(ObjectiveFunction):
         assert frustration % 2 == 0
         return frustration // 2
 
-    def objective_function_v2(self, neighborhood):
+    def objective_function_v2(self, neighborhood, partition=None):
         """
         使用partition和neighborhood计算line index of imbalance
 
-        :param neighborhood:
-        :return:
+        :param partition: 可以自定义partition，否则使用当前状态下的partition
+        :param neighborhood: 邻域结构
+        :return: 目标函数值
         """
 
         frustrations = {}
+        if partition is None:
+            partition = self.partition
 
-        for cid, community in self.partition.items():
+        for cid, community in partition.items():
 
             pos_out, neg_in = 0, 0
 

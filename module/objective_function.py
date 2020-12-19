@@ -47,7 +47,7 @@ class ObjectiveFunction:
     def objective_function(self):
         return - 2 << 32
 
-    def objective_function_v2(self, neighborhood):
+    def objective_function_v2(self, neighborhood, partition=None):
         pass
 
     def move(self, node, destination, delta):
@@ -87,9 +87,13 @@ class ObjectiveFunction:
         """
 
         adjacent_node = set()
+        # bug here
+        # the algorithm to find neighbor communities is inefficient
+        # print(self.partition[cid])
 
         for node in self.partition[cid]:
-            adjacent_node = adjacent_node.union(neighborhood[node]['+'] | neighborhood[node]['-'])
+            # print(node)
+            adjacent_node = adjacent_node | neighborhood[node]['+'] | neighborhood[node]['-']
 
         adjacent_community = set([self.solution[i] for i in adjacent_node])
         adjacent_community.discard(cid)

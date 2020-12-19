@@ -33,6 +33,9 @@ class LocalSearch:
                 break
             for node in self.sorted_node:
 
+                # if node % 10000 == 0:
+                #     print('Current node:', node)
+
                 min_delta = 0
                 candidate = -1
 
@@ -57,24 +60,23 @@ class LocalSearch:
         obj = self.objective_function
         community_list = list(obj.partition.keys())
         tabu_list = set()
-        rd.shuffle(community_list)
-
+        # rd.shuffle(community_list)
+        ct = 0
         for c1 in community_list:
-
+            ct += 1
+            # print(ct, '/', len(community_list))
+            # print("Merging:", c1, ' in ', community_list)
             if c1 in tabu_list:
                 # 被合并过的社区无需再次考虑，放进tabu_list并跳过
                 continue
 
             min_delta = 0
             candidate = -1
-
             for c2 in obj.get_adjacent_community_of_community(c1, self.neighborhood):
-
                 delta = obj.delta_caused_by_merge(c1, c2, self.neighborhood)
                 if delta < min_delta:
                     min_delta = delta
                     candidate = c2
-
             # 寻找最优的移动方式
             if candidate != -1:
                 obj.merge(c1, candidate, min_delta)
@@ -110,6 +112,6 @@ class LocalSearch:
         else:
 
             sorted_node = list(range(len(self.neighborhood)))
-            rd.shuffle(sorted_node)
+            # rd.shuffle(sorted_node)
 
         return sorted_node

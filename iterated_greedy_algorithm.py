@@ -1,4 +1,5 @@
 from module import *
+import time
 import signed_utils as utils
 import random as rd
 
@@ -51,7 +52,7 @@ class IteratedGreedy:
             # print(self.objective_function.partition)
 
             ls.local_move()
-            ls.community_merge()
+            # ls.community_merge()
 
             if self.objective_function.obj_value < self.best_value:
                 self.best_value = self.objective_function.obj_value
@@ -61,7 +62,7 @@ class IteratedGreedy:
 
             self.destruction_and_reconstruction(0.3)
             ls.local_move()
-            ls.community_merge()
+            # ls.community_merge()
             ct += 1
 
         print('IG Complete!')
@@ -103,9 +104,12 @@ class IteratedGreedy:
 if __name__ == '__main__':
 
     file_dir = r'C:\Users\WQQDuan\PycharmProjects\conda\social_network\src\Slashdot'
-    file_name = r'\slashdot-undirected-size1000-part0.g'
+    file_name = r'\slashdot-undirected-size10000-part0.g'
 
     ds = utils.load_data(file_dir + file_name)
 
     ig = IteratedGreedy(ds)
+    t1 = time.time()
     ig.run()
+    t2 = time.time()
+    print('Total time cost:', t2 - t1)
