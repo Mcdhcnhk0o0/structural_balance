@@ -1,6 +1,7 @@
 from module import *
+from unittest import TestCase
 import signed_utils as utils
-import time
+import unittest
 
 
 file_dir = r'C:\Users\WQQDuan\PycharmProjects\conda\social_network\src\Slashdot'
@@ -10,43 +11,56 @@ dataset = utils.load_data(file_dir + file_name)
 nbr = Neighborhood(dataset=dataset).neighborhood_structure
 
 
-# 测试local search
-def test_of_local_search():
-    obj = Frustration(dataset=dataset)
-    obj.update_objective_function()
+class TestInitialization(TestCase):
 
-    ls = LocalSearch(obj_function=obj, neighborhood=nbr)
+    init = Initialization(dataset=dataset, neighborhood=nbr)
 
-    print('test of move')
-    print(ls.objective_function.obj_value)
-    ls.local_move()
-    print(ls.objective_function.obj_value)
-    ls.objective_function.update_objective_function()
-    print(ls.objective_function.obj_value)
+    def test_greedy(self):
+        obj_function = Frustration(dataset=dataset)
+        solution, partition = self.init.greedy_initialization(obj_function)
+        self.assertIsInstance(partition, dict)
 
-    print('test of merge')
-    ls.community_merge()
-    print(ls.objective_function.obj_value)
-    ls.objective_function.update_objective_function()
-    print(ls.objective_function.obj_value)
+    def test_seed(self):
+        obj_function = Frustration(dataset=dataset)
+        solution, partition = self.init.seed_initialization(obj_function)
+        self.assertIsInstance(partition, dict)
+
+    def test_lpa(self):
+        solution, partition = self.init.lpa_initialization()
+        self.assertIsInstance(partition, dict)
 
 
-# 测试frustration的两种计算方式
-def test_of_frustration_v2():
-    obj = Frustration(dataset=dataset)
-    t1 = time.time()
-    print('v1:', obj.objective_function())
-    t2 = time.time()
-    print('v2:', obj.objective_function_v2(neighborhood=nbr))
-    t3 = time.time()
-    ls = LocalSearch(obj_function=obj, neighborhood=nbr)
-    ls.local_move()
-    print('v1:', obj.objective_function())
-    print('v2:', obj.objective_function_v2(neighborhood=nbr))
+class TestFrustration(TestCase):
 
-    print('time of v1:', t2 - t1)
-    print('time of v2:', t3 - t2)
+    objective_function = Frustration(dataset=dataset)
+
+    def test_frustration(self):
+        f1 = self.objective_function.objective_function()
+        f2 = self.objective_function.objective_function_v2(nbr)
+        self.assertEqual(f1, f2)
+
+
+class TestLocalSearch(TestCase):
+
+    objective_function = Frustration(dataset=dataset)
+    ls = LocalSearch(obj_function=objective_function, neighborhood=nbr)
+
+    def test_move(self):
+        self.objective_function.update_objective_function()
+        self.ls.local_move()
+        value_after_move = self.objective_function.obj_value
+        self.objective_function.update_objective_function()
+        value_after_update = self.objective_function.obj_value
+        self.assertEqual(value_after_update, value_after_move)
+
+    def test_merge(self):
+        self.objective_function.update_objective_function()
+        self.ls.community_merge()
+        value_after_merge = self.objective_function.obj_value
+        self.objective_function.update_objective_function()
+        value_after_update = self.objective_function.obj_value
+        self.assertEqual(value_after_update, value_after_merge)
 
 
 if __name__ == '__main__':
-    test_of_frustration_v2()
+    unittest.main()

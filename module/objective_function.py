@@ -2,7 +2,6 @@ import signed_utils as utils
 
 
 class ObjectiveFunction:
-    # 目标函数类
 
     def __init__(self, dataset: utils.Dataset, init_solution=None):
         """
@@ -11,11 +10,6 @@ class ObjectiveFunction:
         :param dataset: 读入的数据集，格式在utils中给出
         :param init_solution: 可选参数，初始解
         """
-
-        # 解的表示方式约定：
-        # solution：一个列向量，一般以dict(int)的形式给出，支持np.ndarray
-        # partition：一个包含若干子集的集合，一般以dict(set)的形式给出
-        # 使用dict和set而不用list都是为了更高的查找效率和增删效率（虽然dict占用的内存较多）
 
         self._dataset = dataset
         self.obj_value = - 2 << 32
@@ -43,12 +37,13 @@ class ObjectiveFunction:
         :return:
         """
         self.obj_value = self.objective_function()
+        return self.obj_value
 
     def objective_function(self):
-        return - 2 << 32
+        return self.obj_value
 
     def objective_function_v2(self, neighborhood, partition=None):
-        pass
+        return self.obj_value
 
     def move(self, node, destination, delta):
         pass
@@ -72,7 +67,7 @@ class ObjectiveFunction:
         """
         nbr = neighborhood[node]['+'] | neighborhood[node]['-']
         nbr_community = set([self.solution[i] for i in nbr])
-        # 元素不存在时，discard不会引发KeyError
+        # when the element doesn't exist, discard would not raise KeyError
         nbr_community.discard(self.solution[node])
 
         return nbr_community
@@ -88,11 +83,10 @@ class ObjectiveFunction:
 
         adjacent_node = set()
         # bug here
+        # TODO the algorithm about adjacent community needs to be optimized
         # the algorithm to find neighbor communities is inefficient
-        # print(self.partition[cid])
 
         for node in self.partition[cid]:
-            # print(node)
             adjacent_node = adjacent_node | neighborhood[node]['+'] | neighborhood[node]['-']
 
         adjacent_community = set([self.solution[i] for i in adjacent_node])
