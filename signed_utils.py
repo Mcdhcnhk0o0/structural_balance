@@ -252,3 +252,26 @@ def collect_degree_info(dataset: Dataset, neighborhood) -> dict:
         degree[i] = i_degree
 
     return degree
+
+
+def detect_isolated_nodes(vnum, neighborhood):
+    """
+
+    :param vnum:
+    :param neighborhood:
+    :return:
+    """
+    alone = set()
+    isolated = set()
+
+    for i in range(vnum):
+        if not neighborhood[i]['+']:
+            if not neighborhood[i]['-']:
+                alone.add(i)
+            else:
+                isolated.add(i)
+
+    print('alone(no neighbors, total', len(alone), '):', alone)
+    print('isolated(no pos neighbors, total', len(isolated), '):', isolated)
+
+    return alone, isolated
